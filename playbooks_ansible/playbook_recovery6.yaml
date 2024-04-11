@@ -1,0 +1,59 @@
+---
+- name: Playbook Recovery
+  hosts: all
+  gather_facts: false
+  tasks:
+
+    - name: BBBBAAMMMM 2 Include BACKEND APACHE tasks
+      include_tasks: apache2.yaml
+      when: "'backend' in group_names"
+
+    - name: BBBBAAMMMM 2 Include BACKEND PROMETHEUS tasks
+      include_tasks: prometheusbackend1.yaml
+      when: "'backend' in group_names"
+
+    - name: BBBBAAMMMM 1 Include FRONTEND NGINX tasks
+      include_tasks: nginx.yaml
+      when: "'frontend' in group_names"
+
+    - name: BBBBAAMMMM 1 Include FRONTEND PROMETHEUS tasks
+      include_tasks: prometheusfrontend1.yaml
+      when: "'frontend' in group_names"
+
+    - name: BBBBAAMMMM 3 Include LOGMON PROMETHEUS tasks
+      include_tasks: prometheusmonitoring1.yaml
+      when: "'monitoring' in group_names"
+
+    - name: BBBBAAMMMM 3 Include LOGMON GRAFANA tasks
+      include_tasks: grafana1.yaml
+      when: "'monitoring' in group_names"
+
+    - name: BBBBAAMMMM 4 Include BACKEND MYSQLSOURCE tasks
+      include_tasks: mysqlsource.yaml
+      when: "'mysql_source' in group_names"
+
+    - name: BBBBAAMMMM 5 Include BACKEND MYSQLREPLICA tasks
+      include_tasks: mysqlreplica.yaml
+      when: "'mysql_replica' in group_names"
+
+    - name: BBBBAAMMMM 6 Include BACKEND MYSQLBACKUP tasks
+      include_tasks: backupmysql.yaml
+      when: "'mysql_replica' in group_names"
+
+    - name: BBBBAAMMMM 7 Include BACKEND ELK tasks
+      include_tasks: elk_ansible_backend1.yaml
+      when: "'backend' in group_names"
+
+    - name: BBBBAAMMMM 8 Include FRONTEND ELK tasks
+      include_tasks: elk_ansible_frontend1.yaml
+      when: "'frontend' in group_names"
+
+    - name: BBBBAAMMMM 9 Include MONITORING ELK tasks
+      include_tasks: elk_ansible_monitoring1.yaml
+      when: "'monitoring' in group_names"
+
+
+#  handlers:
+#    - name: Display playbook status
+#      debug:
+#        msg: "Completed playbook: {{ ansible_playbook_name }}"

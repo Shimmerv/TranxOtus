@@ -1,0 +1,37 @@
+---
+#    - name: Install MySQL
+#      shell: sudo apt install -y mysql-server-8.0
+
+    - name: Remove existing mysqld.cnf
+      file:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        state: absent
+
+    - name: Copy MySQL configuration files
+      copy:
+        src: /home/tranx/TranxOtus/mysqld_source.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+#    - name: Copy MySQL backup
+#      copy:
+#        src: /home/tranx/backups2/test_tbl.sql
+#        dest: /home/tranx/ELK/test_tbl.sql
+#
+#    - name: Create db tranx_db
+#      shell: mysql -u root -p'aeontranx' -e "CREATE DATABASE tranx_db;"
+#
+#    - name: Import tables from backup tranx_db
+#      shell: mysql -u root -p'aeontranx' tranx_db < /home/tranx/ELK/test_tbl.sql
+
+    - name: Restart MySQL
+      systemd:
+        name: mysql
+        state: restarted
+
+    - name: Create MySQL user
+      shell: mysql -e "CREATE USER 'gilbert'@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'gilbert123';"
+      become_user: root
+
+    - name: Grant replication privileges
+      shell: mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'gilbert'@'%';"
+      become_user: root

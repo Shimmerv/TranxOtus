@@ -1,0 +1,31 @@
+#prometheus
+---
+#    - name: Update apt cache
+#      apt:
+#        update_cache: yes
+
+    - name: Install necessary packages and Prometheus
+      shell: "sudo apt install -y prometheus prometheus-apache-exporter && sudo apt install -y prometheus prometheus-node-exporter"
+#      shell: "sudo apt install -y jnettop htop iotop iftop atop iptraf-ng nmon && sudo apt install -y prometheus prometheus-apache-exporter && sudo apt install -y prometheus prometheus-node-exporter"
+
+    - name: Reload systemd
+      shell: "sudo systemctl daemon-reload"
+
+    - name: Start prometheus-node-exporter service
+      systemd:
+        name: prometheus-node-exporter
+        state: started
+        enabled: yes
+
+    - name: Remove existing prometheus.yml file (if exists)
+      file:
+        path: /etc/prometheus/prometheus.yml
+        state: absent
+      tags: prometheus
+
+    - name: Copy Prometheus configuration from GitHub (for frontend and backend)
+      copy:
+        src: /home/tranx/TranxOtus/prometheus1.yml
+        dest: /etc/prometheus/prometheus.yml
+      tags: prometheus
+

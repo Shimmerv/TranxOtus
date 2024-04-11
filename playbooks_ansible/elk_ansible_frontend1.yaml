@@ -1,0 +1,24 @@
+---
+#    - name: Remove existing Filebeat Frontend configuration
+#      file:
+#        path: /etc/filebeat/filebeat.yml
+#        state: absent
+#
+#    - name: Copy Filebeat Frontend configuration file
+#      copy:
+#        src: /home/tranx/TranxOtus/filebeat_frontend.yml
+#        dest: /etc/filebeat/filebeat.yml
+
+    - name: Configure FILEBEAT yml FRONTEND
+      template:
+        src: /home/tranx/ansible2/templates/filebeat_frontend.yml.j2
+        dest: /etc/filebeat/filebeat.yml
+
+    - name: Filebeat service is started and enable
+      systemd:
+        name: filebeat
+        state: restarted
+        enabled: true
+
+    - name: Restart Filebeat
+      shell: "sudo systemctl restart filebeat"

@@ -1,0 +1,25 @@
+#Grafana
+---
+#    - name: Install Grafana package
+#      shell: "sudo apt install -y /home/tranx/ELK/grafana_10.2.2_amd64_224190_2cad86-224190-460adc.deb"
+
+#    - name: Install missing dependencies
+#      apt:
+#        name: '*'
+#        state: present
+#        update_cache: yes
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Start Grafana service
+      systemd:
+        name: grafana-server
+        state: started
+        enabled: yes
+
+    - name: Enable prometheus-node-exporter service
+      systemd:
+        name: prometheus-node-exporter
+        enabled: yes

@@ -1,0 +1,22 @@
+# nginx.yaml
+---
+#    - name: Install Nginx
+#      apt:
+#        name: nginx
+#        state: present
+
+    - name: Remove existing nginx.conf
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Copy nginx.conf from AnsibleHost
+      copy:
+        src: /home/tranx/TranxOtus/nginx.conf
+        dest: /etc/nginx/sites-enabled/default
+
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
+

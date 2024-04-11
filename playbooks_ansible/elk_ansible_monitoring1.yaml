@@ -1,0 +1,75 @@
+---
+#    - name: Copy ELK configuration files
+#      copy:
+#        src: "{{ item.src }}"
+#        dest: "{{ item.dest }}"
+#      loop:
+#        - { src: '/home/tranx/TranxOtus/elasticsearch.yml', dest: '/home/tranx/ELK/elasticsearch.yml' }
+#        - { src: '/home/tranx/TranxOtus/kibana.yml', dest: '/home/tranx/ELK/kibana.yml' }
+#        - { src: '/home/tranx/TranxOtus/logstash.yml', dest: '/home/tranx/ELK/logstash.yml' }
+#        - { src: '/home/tranx/TranxOtus/logstash-es.conf', dest: '/home/tranx/ELK/logstash-es.conf' }
+#        - { src: '/home/tranx/TranxOtus/filebeat_monitoring.yml', dest: '/home/tranx/ELK/filebeat_monitoring.yml' }
+#        - { src: '/home/tranx/TranxOtus/elkscript_monitoring.sh', dest: '/home/tranx/ELK/elkscript_monitoring.sh' }
+
+    - name: Configure ELASTICSEARCH yml
+      template:
+        src: /home/tranx/ansible2/templates/elasticsearch.yml.j2
+        dest: /etc/elasticsearch/elasticsearch.yml
+
+    - name: Elasticsearch service is started and enable
+      systemd:
+        name: elasticsearch
+        state: restarted
+        enabled: true
+
+    - name: Configure LOGSTASH yml
+      template:
+        src: /home/tranx/ansible2/templates/logstash.yml.j2
+        dest: /etc/logstash/logstash.yml
+
+    - name: Configure LOGSTASH yml
+      template:
+        src: /home/tranx/ansible2/templates/logstash-es.conf.j2
+        dest: /etc/logstash/conf.d/logstash-nginx-es.conf
+
+    - name: Logstash service is started and enable
+      systemd:
+        name: logstash
+        state: restarted
+        enabled: true
+
+    - name: Configure FILEBEAT yml
+      template:
+        src: /home/tranx/ansible2/templates/filebeat_monitoring.yml.j2
+        dest: /etc/filebeat/filebeat.yml
+
+    - name: Filebeat service is started and enable
+      systemd:
+        name: filebeat
+        state: restarted
+        enabled: true
+
+    - name: Configure KIBANA yml
+      template:
+        src: /home/tranx/ansible2/templates/kibana.yml.j2
+        dest: /etc/kibana/kibana.yml
+
+    - name: UFW allow kibana
+      shell: sudo ufw allow 5601
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Kibana service is started and enable
+      systemd:
+        name: kibana
+        state: restarted
+        enabled: true
+
+    - name: Reload systemd daemon
+      shell: sudo systemctl restart kibana
+
+
+#    - name: ELK monitoring script start
+#      shell: /home/tranx/ELK/elkscript_monitoring.sh

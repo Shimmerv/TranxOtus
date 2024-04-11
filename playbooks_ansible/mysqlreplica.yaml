@@ -1,0 +1,34 @@
+---
+#    - name: Install MySQL
+#      shell: sudo apt install -y mysql-server-8.0
+
+    - name: Remove existing mysqld.cnf
+      file:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        state: absent
+
+    - name: Copy MySQL configuration files
+      copy:
+        src: /home/tranx/TranxOtus/mysqld_replica.cnf
+        dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+    - name: Create directory for backups
+      shell: mkdir /var/lib/mysql/backups
+
+#    - name: Copy MySQL backup file
+#      copy:
+#        src: /home/tranx/backups2/test_tbl.sql
+#        dest: /home/tranx/ELK/test_tbl.sql
+
+    - name: Restart MySQL
+      systemd:
+        name: mysql
+        state: restarted
+
+    - name: Change replication source
+      shell: mysql -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='192.168.0.177', SOURCE_USER='gilbert', SOURCE_PASSWORD='gilbert123', SOURCE_AUTO_POSITION = 1, GET_SOURCE_PUBLIC_KEY = 1;"
+      become_user: root
+
+    - name: Start replica
+      shell: mysql -e "START REPLICA;"
+      become_user: root

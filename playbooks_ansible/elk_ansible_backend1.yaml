@@ -1,0 +1,26 @@
+---
+#    - name: Remove existing elasticsearch configuration
+#      file:
+#        path: /etc/filebeat/filebeat.yml
+#        state: absent
+#
+#    - name: Copy Filebeat backend configuration file
+#      copy:
+#        src: /home/tranx/TranxOtus/filebeat_backend.yml
+#        dest: /etc/filebeat/filebeat.yml
+#
+#    - name: Restart Filebeat
+#      shell: "sudo systemctl restart filebeat"
+    - name: Configure FILEBEAT yml BACKEND
+      template:
+        src: /home/tranx/ansible2/templates/filebeat_backend.yml.j2
+        dest: /etc/filebeat/filebeat.yml
+
+    - name: Filebeat service is started and enable
+      systemd:
+        name: filebeat
+        state: restarted
+        enabled: true
+
+    - name: Restart Filebeat
+      shell: "sudo systemctl restart filebeat"

@@ -1,0 +1,17 @@
+---
+    - name: Create directory
+      ansible.builtin.file:
+        path: /home/tranx/sqqql
+        state: directory
+        mode: "0755"
+    - name: Download backup script
+      copy:
+        src: /home/tranx/TranxOtus/backupdb_script.sh
+        dest: /home/tranx/sqqql/backupdb_script.sh
+        mode: '0755'
+    - name: Add cron job for backup
+      cron:
+        name: "Database Backup"
+        minute: "0"
+        hour: "*/12"
+        job: "/home/tranx/sqqql/backupdb_script.sh"
