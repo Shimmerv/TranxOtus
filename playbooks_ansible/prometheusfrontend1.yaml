@@ -4,7 +4,7 @@
 #      apt:
 #        update_cache: yes
 
-    - name: Install necessary packages and Prometheus
+    - name: Install necessary packages and Prometheus frontend
       shell: "sudo apt install -y prometheus prometheus-nginx-exporter && sudo apt install -y prometheus prometheus-node-exporter"
 #      shell: "sudo apt install -y jnettop htop iotop iftop atop iptraf-ng nmon && sudo apt install -y prometheus prometheus-nginx-exporter && sudo apt install -y prometheus prometheus-node-exporter"
 
