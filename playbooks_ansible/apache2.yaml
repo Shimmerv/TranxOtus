@@ -1,8 +1,33 @@
 ---
     - name: Create apache2 web index.html
       template:
-        src: /home/tranx/ansible2/templates/index.html.j2
+        src: /home/tranx/ansible2/templates/indexhack2.html.j2
         dest: /var/www/html/index.html
+
+    - name: Copy HACKERS JS from AnsibleHost
+      copy:
+        src: /home/tranx/TranxOtus/hackers/hack-the-gibson-css/dist/script.js
+        dest: /var/www/html/script.js
+
+    - name: Copy HACKERS CSS from AnsibleHost
+      copy:
+        src: /home/tranx/TranxOtus/hackers/hack-the-gibson-css/dist/style.css
+        dest: /var/www/html/style.css
+
+    - name: Copy dir dist
+      copy:
+        src: /home/tranx/TranxOtus/hackers/hack-the-gibson-css/dist
+        dest: /var/www/html/
+
+    - name: Copy dir src
+      copy:
+        src: /home/tranx/TranxOtus/hackers/hack-the-gibson-css/src
+        dest: /var/www/html
+
+    - name: apache_vhost
+      template:
+        src: /home/tranx/ansible2/templates/apache_vhost.conf.j2
+        dest: /etc/apache2/sites-available/000-default.conf
 
     - name: Apache service is started and enable
       service:

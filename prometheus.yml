@@ -9,6 +9,8 @@ global:
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
       monitor: 'example'
+remote_write:
+  - url: "http://localhost:3000/api/prom/push"
 
 # Alertmanager configuration
 alerting:
@@ -35,10 +37,17 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['localhost:9090', '192.168.0.176:9090', '192.168.0.177:9090', '192.168.0.178:9090']
+      - targets: ['localhost:9090']
 
-  - job_name: node
-    # If prometheus-node-exporter is installed, grab stats about the local
-    # machine by default.
+  - job_name: logmon
     static_configs:
-      - targets: ['localhost:9100','192.168.0.176:9100', '192.168.0.177:9100', '192.168.0.178:9100']
+      - targets: ['localhost:9100']
+  - job_name: frontend
+    static_configs:
+      - targets: ['192.168.0.176:9100']
+  - job_name: backend1
+    static_configs:
+      - targets: ['192.168.0.177:9100']
+  - job_name: backend2
+    static_configs:
+      - targets: ['192.168.0.178:9100']

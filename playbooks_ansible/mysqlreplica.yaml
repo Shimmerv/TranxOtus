@@ -1,7 +1,4 @@
 ---
-#    - name: Install MySQL
-#      shell: sudo apt install -y mysql-server-8.0
-
     - name: Remove existing mysqld.cnf
       file:
         path: /etc/mysql/mysql.conf.d/mysqld.cnf
