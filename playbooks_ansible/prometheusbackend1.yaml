@@ -5,7 +5,7 @@
 #        update_cache: yes
 
     - name: Install necessary packages and Prometheus
-      shell: "sudo apt install -y prometheus prometheus-apache-exporter && sudo apt install -y prometheus prometheus-node-exporter"
+      shell: "sudo apt install -y prometheus prometheus-node-exporter"
 #      shell: "sudo apt install -y jnettop htop iotop iftop atop iptraf-ng nmon && sudo apt install -y prometheus prometheus-apache-exporter && sudo apt install -y prometheus prometheus-node-exporter"
 
     - name: Reload systemd
